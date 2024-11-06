@@ -4,7 +4,7 @@ import tkinter as tk
 from tkinter import messagebox
 
 
-start_time = time.time()
+
 
 #hang_2list = [[3, 2], [4, 4], [2, 1, 4], [2], [6], [9], [11, 1], [1, 8], [4, 3], [1, 7, 1], [1, 10, 1], [1, 4, 1],
 #              [1, 1, 8], [9], [9]]
@@ -12,7 +12,8 @@ start_time = time.time()
 #lie_2list = [[1, 3], [2], [2, 4, 2], [2, 3, 2, 1], [3, 4, 2, 2], [1, 4, 2, 2], [3, 2, 2], [3, 2, 3], [4, 2, 3],
 #             [2, 4, 2, 3], [3, 3, 3, 3], [2, 3, 3, 3], [6, 3, 2], [3, 1], [1, 4]]
 
-right_answer = None
+right_answer = []
+
 
 
 def near_list(a_list):
@@ -101,7 +102,7 @@ def search_solution(depth, current_solution, hang_2list, lie_2list):
     global right_answer
     # print(depth)
     # 如果已经生成了全部行的组合，进入列判断
-    right_answer = []
+
     if depth == len(hang_2list):
         # 转置得到列组合
         transferred_2list = transpose(current_solution)
@@ -117,7 +118,7 @@ def search_solution(depth, current_solution, hang_2list, lie_2list):
         if judge_result:
             right_answer = current_solution[:]
             print("有解")
-            print(right_answer)
+            display_2list(right_answer)
         return
 
     # 遍历当前行的可能组合
@@ -162,32 +163,10 @@ def pruning_function(partial_solution, depth, lie_2list):
     return True
 
 
-'''
-if __name__ == "__main__":
-    init_possible_to_check = 1
-    all_hang_possible_3list = []
-
-    for hang_condition in hang_2list:
-        hang_possible_2list = F.get_possible_match(list_len=len(hang_2list), match_list=hang_condition)
-        init_possible_to_check *= len(hang_possible_2list)
-        all_hang_possible_3list.append(hang_possible_2list)
-
-    print(f"仅仅从行来说，需要验证的有{init_possible_to_check}")
-    for all_combine in itertools.product(*all_hang_possible_3list):
-        print(len(all_combine))
-        break
-    right_answer = []
-    cnt = 0
-    search_solution(0, [])
-    print("正确答案是：")
-    F.display_2list(right_answer)
-    print("正确答案有：", cnt, '个。')
-    end_time = time.time()
-    print(f"程序运行了{end_time - start_time}")
-'''
 
 
 def solve(hang_2list, lie_2list):
+    start_time = time.time()
     global all_hang_possible_3list
     all_hang_possible_3list = []
     for hang_condition in hang_2list:
@@ -198,7 +177,7 @@ def solve(hang_2list, lie_2list):
     print("正确答案是：")
     # display_2list(right_answer)
     end_time = time.time()
-    print(f"程序运行了{end_time - start_time}秒。")
+    print(f"程序运行了{end_time - start_time}秒，得出了结果。")
     return right_answer
 
 
@@ -230,18 +209,22 @@ result_canvas.grid(row=4, column=15, rowspan=15, columnspan=15)
 # 求解按钮的点击事件
 def on_run_clicked():
     try:
+
         global hang_2list
         global lie_2list
         global right_answer
+        right_answer = []
         hang_2list = [list(map(int, entries_hang[f'hang{i}'].get().split(','))) if entries_hang[f'hang{i}'].get() else [] for i in range(15)]
         lie_2list = [list(map(int, entries_lie[f'lie{i}'].get().split(','))) if entries_lie[f'lie{i}'].get() else [] for i in range(15)]
         solve(hang_2list, lie_2list)
         right_answer_tk = right_answer[:]
+        # print(right_answer)
+        # print(right_answer_tk)
         if right_answer_tk:
-            print(right_answer_tk)
+            # print(right_answer_tk)
             display_result(right_answer_tk)
         else:
-            messagebox.showerror("无解！","无解！")
+            messagebox.showerror("无解！", "无解！")
     except ValueError:
         right_answer = []
         messagebox.showerror("错误", "请输入有效的数字")
@@ -253,7 +236,7 @@ def display_result(right_answer_tk):
     result_canvas.delete("all")
     for i, row in enumerate(right_answer_tk):
         for j, val in enumerate(row):
-            color = "black" if val == 1 else "white"
+            color = "grey" if val == 1 else "white"
             result_canvas.create_rectangle(j * cell_size, i * cell_size, (j + 1) * cell_size, (i + 1) * cell_size,
                                            fill=color)
 
