@@ -1,4 +1,4 @@
-# Nonogram solver(数织游戏解算器)(使用友好)
+# Nonogram solver(数织游戏解算器)(使用友好，给个星星吧，谢谢您)
 ## 使用方式
 * 15*15游戏,可以直接运行exe文件，或者运行input_nice.py，注意如果是0，不填写  
 * 非15*15游戏，可以修改main或者solve里面的二重列表hang_2list和lie_2list，然后直接运行  
